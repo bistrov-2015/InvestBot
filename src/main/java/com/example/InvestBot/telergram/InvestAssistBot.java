@@ -1,22 +1,21 @@
 package com.example.InvestBot.telergram;
 
 import com.example.InvestBot.tinkoff.EventHandler;
+import com.example.InvestBot.tinkoff.dto.SequrityDto;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
-import com.pengrad.telegrambot.model.User;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.GetMe;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.GetMeResponse;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
+
 @Component
 @PropertySource("classpath:application.properties")
 public class InvestAssistBot {
@@ -36,6 +35,7 @@ public class InvestAssistBot {
     public static final String BUTTON_BILL_2 = "Анти-мейнстрим Aggressive";
     public static final String BUTTON_BILL_3 = "Новая Волна";
     public static final String BUTTON_BACK = "Назад";
+    public static final String NOT_FOUND = "Обработчик команды не найден";
 
     public InvestAssistBot(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -62,7 +62,7 @@ public class InvestAssistBot {
     }
 
     public SendMessage getStartKeyboard(long chatId, String text) {
-        String response;
+        String response = NOT_FOUND;
         switch (text) {
             case (BUTTON_OPERATIONS):
                 response = "курс цб";
@@ -76,10 +76,12 @@ public class InvestAssistBot {
             case (BUTTON_BILL_1):
             case (BUTTON_BILL_2):
             case (BUTTON_BILL_3):
-                eventHandler.getOperations(text);
+                response = eventHandler.getOperations(text);
                 //return getReplyMarkupPositions(chatId, getPositionBalanseByAccountName(text));
+                break;
             case (BUTTON_BACK):
-                getReplyMarkup(chatId, "");
+                getReplyMarkup(chatId,BUTTON_BACK);
+                break;
             default:
                 response = text;
         }

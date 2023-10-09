@@ -1,8 +1,7 @@
-package com.example.InvestBot.telergram;
+package com.example.InvestBot.tinkoff.dto;
 
 import com.example.InvestBot.telergram.util.IOUtil;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.piapi.contract.v1.Account;
 import ru.tinkoff.piapi.core.InvestApi;

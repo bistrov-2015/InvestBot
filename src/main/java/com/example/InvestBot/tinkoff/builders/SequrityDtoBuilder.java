@@ -1,5 +1,7 @@
-package com.example.InvestBot.telergram;
+package com.example.InvestBot.tinkoff.builders;
 
+import com.example.InvestBot.tinkoff.dto.PositionToPrint;
+import com.example.InvestBot.tinkoff.dto.SequrityDto;
 import ru.tinkoff.piapi.contract.v1.Account;
 import ru.tinkoff.piapi.core.InvestApi;
 import ru.tinkoff.piapi.core.models.SecurityPosition;

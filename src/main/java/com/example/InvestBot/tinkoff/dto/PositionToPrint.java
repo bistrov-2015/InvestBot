@@ -1,4 +1,4 @@
-package com.example.InvestBot.telergram;
+package com.example.InvestBot.tinkoff.dto;
 
 import org.springframework.stereotype.Component;
 

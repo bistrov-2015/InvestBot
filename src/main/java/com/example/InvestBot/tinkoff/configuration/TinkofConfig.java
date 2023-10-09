@@ -1,4 +1,4 @@
-package com.example.InvestBot.tinkoff;
+package com.example.InvestBot.tinkoff.configuration;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
