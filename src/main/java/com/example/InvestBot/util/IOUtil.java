@@ -1,8 +1,12 @@
-package com.example.InvestBot.telergram.util;
+package com.example.InvestBot.util;
 
+import com.example.InvestBot.applicationConstant.ApplicationConstant;
 import org.springframework.stereotype.Component;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+
 @Component
 public class IOUtil {
     public String positionToPrint(String accountName, List<String> pairs){
@@ -11,5 +15,8 @@ public class IOUtil {
                 "\n" + "******************************" + "\n" +
                 String.join("\n______________________________\n", pairs) +
                 "\n" + "______________________________";
+    }
+    public static String getDateForInsertToTelegrammMessage(String date){
+        return date.format(String.valueOf(DateTimeFormatter.ofPattern(ApplicationConstant.DATE_PATTERN_FOR_TELEGRAMM.getMessege(), new Locale("ru"))));
     }
 }

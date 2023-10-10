@@ -1,15 +1,15 @@
 package com.example.InvestBot.tinkoff;
 
+import com.example.InvestBot.applicationConstant.ApplicationConstant;
+import com.example.InvestBot.tinkoff.dto.OperationMessage;
 import com.example.InvestBot.tinkoff.dto.SequrityDto;
 import com.example.InvestBot.tinkoff.builders.SequrityDtoBuilder;
-import io.grpc.StatusRuntimeException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.piapi.contract.v1.Account;
 import ru.tinkoff.piapi.contract.v1.OperationState;
 import ru.tinkoff.piapi.core.InvestApi;
-import ru.tinkoff.piapi.core.exception.ApiRuntimeException;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -74,17 +74,17 @@ public class EventHandler {
     }
 
     public String getOperations(String accountName) {
-        List<String>returnedOperations = getOperations(api, accountName);
-        String result = "";
-        for (String element:returnedOperations
+        List<OperationMessage> returnedOperations = getOperations(api, accountName);
+        String result="";
+        for (OperationMessage element:returnedOperations
              ) {
-            result+=element+"\n";
+            result+=element.toStringForTelegramm()+"\n";
         }
         return result;
     }
 
-    private List<String> getOperations(InvestApi api, String accountName) {
-        List<String>returnedOperations = new ArrayList<>();
+    private List<OperationMessage> getOperations(InvestApi api, String accountName) {
+        List<OperationMessage>returnedOperations = new ArrayList<>();
         var accounts = api.getUserService().getAccountsSync();
         var mainAccount = accounts.get(0).getId();//2071316935
         var accountId = getAccountIdByAccountNames(accountName);//2071316935
@@ -95,29 +95,17 @@ public class EventHandler {
             var operation = operations.get(i);
             var date = timestampToString(operation.getDate());
             var state = OperationState.valueOf(operation.getState().name());
-            /*var statDescription = operation.get*/
             var id = operation.getId();
             var type = operation.getType();
-            var payment = moneyValueToBigDecimal(operation.getPayment());//BigDecimal.valueOf(api.getOperationsService().getPositionsSync(accounts.get(0).getId()).getSecurities().get(0).getBalance()).multiply(moneyValueToBigDecimal(operation.getPayment()));
+            var payment = moneyValueToBigDecimal(operation.getPayment());
             var figi = operation.getFigi();
             String instrumentName;
-            try {
+            if(!figi.isEmpty()) {
                 instrumentName = api.getInstrumentsService().getInstrumentByFigiSync(figi).getName();
-            } catch (ru.tinkoff.piapi.core.exception.ApiRuntimeException exception) {
-                //if (((ru.tinkoff.piapi.core.exception.ApiRuntimeException) exception).getStatus().equals("30007")){instrumentName = "";}else instrumentName = "RuntimeException"; log.info(exception.getMessage()+"вызов operation.getFigi() вернул пустую строку");
-                //var cacheException = exception;
-                //var tmp = exception.getCode().equals("30007");
-                if (exception.getCode().equals("30007")) {//cacheException.getCode().equals(exception.getCode())
-                    instrumentName = "не является инструментом";
-                } else {
-                    log.info(exception.getMessage());
-                    log.info(exception.getStackTrace().toString());
-                    instrumentName = "ошибка, подробности в логах";
-                }
-            }
-            //var instrumentName = api.getInstrumentsService().getInstrumentByFigiSync(figi).getName();
-            log.info("{}, {}, Сумма: {}, дата: {}, статус: {}", type, instrumentName, payment, date, state);
-            returnedOperations.add(type+", Сумма:"+payment.setScale(2));
+            } else instrumentName = ApplicationConstant.NOT_INSTRUMENT.getMessege();
+            OperationMessage operationMessage = new OperationMessage(date,type,state.toString(),id,payment,figi,instrumentName);
+            log.info(operationMessage.toStringForLogs());
+            returnedOperations.add(operationMessage);
         }
         return returnedOperations;
     }

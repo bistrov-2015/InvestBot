@@ -64,14 +64,14 @@ public class InvestAssistBot {
     public SendMessage getStartKeyboard(long chatId, String text) {
         String response = NOT_FOUND;
         switch (text) {
-            case (BUTTON_OPERATIONS):
+            case (BUTTON_CB):
                 response = "курс цб";
                 break;
             case (BUTTON_EXCHANGE):
 
                 response = "курс биржи";
                 break;
-            case (BUTTON_POSITIONS):
+            case (BUTTON_OPERATIONS):
                 return getReplyMarkupPositions(chatId, text);
             case (BUTTON_BILL_1):
             case (BUTTON_BILL_2):
@@ -118,7 +118,7 @@ public class InvestAssistBot {
     }
 
     private static SendMessage getReplyMarkup(long chatId, String text) {
-        return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{BUTTON_CB}, new String[]{BUTTON_EXCHANGE}, new String[]{BUTTON_POSITIONS}));
+        return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{BUTTON_CB}, new String[]{BUTTON_EXCHANGE}, new String[]{BUTTON_OPERATIONS}));
     }
 
     private SendMessage getReplyMarkupPositions(long chatId, String text) {

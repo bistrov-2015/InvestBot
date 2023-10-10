@@ -1,6 +1,6 @@
 package com.example.InvestBot.tinkoff.dto;
 
-import com.example.InvestBot.telergram.util.IOUtil;
+import com.example.InvestBot.util.IOUtil;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.piapi.contract.v1.Account;
