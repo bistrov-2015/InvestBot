@@ -1,11 +1,8 @@
 package com.example.InvestBot.tinkoff.dto;
 
-import com.example.InvestBot.applicationConstant.ApplicationConstant;
-import com.example.InvestBot.util.IOUtil;
+import com.example.InvestBot.applicationConstant.BusinessApplicationMessage;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 public class OperationMessage {
     private String date;
@@ -64,7 +61,7 @@ public class OperationMessage {
 
     public String getFigi() {
         if (figi.isEmpty()) {
-            return ApplicationConstant.NOT_CONTAIN_FIGI.getMessege();
+            return BusinessApplicationMessage.NOT_CONTAIN_FIGI.getMessage();
         } else
             return figi;
     }

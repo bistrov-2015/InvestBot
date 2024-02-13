@@ -1,6 +1,6 @@
 package com.example.InvestBot.util;
 
-import com.example.InvestBot.applicationConstant.ApplicationConstant;
+import com.example.InvestBot.applicationConstant.BusinessApplicationMessage;
 import org.springframework.stereotype.Component;
 
 import java.time.format.DateTimeFormatter;
@@ -17,6 +17,6 @@ public class IOUtil {
                 "\n" + "______________________________";
     }
     public static String getDateForInsertToTelegrammMessage(String date){
-        return date.format(String.valueOf(DateTimeFormatter.ofPattern(ApplicationConstant.DATE_PATTERN_FOR_TELEGRAMM.getMessege(), new Locale("ru"))));
+        return date.format(String.valueOf(DateTimeFormatter.ofPattern(BusinessApplicationMessage.DATE_PATTERN_FOR_TELEGRAMM.getMessage(), new Locale("ru"))));
     }
 }

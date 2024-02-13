@@ -20,7 +20,7 @@ dependencies {
 	//developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	implementation 'com.github.pengrad:java-telegram-bot-api:6.9.0'
-	implementation 'ru.tinkoff.piapi:java-sdk-core:1.5'
+	implementation 'ru.tinkoff.piapi:java-sdk-core:1.8'
 	//implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.33'
 	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
 	implementation group: 'org.slf4j', name: 'slf4j-api', version: '2.0.9'

@@ -1,5 +1,6 @@
 package com.example.InvestBot.telergram;
 
+import com.example.InvestBot.applicationConstant.TelegramDisplayConstants;
 import com.example.InvestBot.tinkoff.EventHandler;
 import com.example.InvestBot.tinkoff.dto.SequrityDto;
 import com.pengrad.telegrambot.TelegramBot;
@@ -26,16 +27,7 @@ public class InvestAssistBot {
     private String stringChatId;
     //private Long longChatId = Long.parseLong(stringChatId);
     private final EventHandler eventHandler;// = new EventHandler();
-    public static final String BUTTON_CB = "ЦБ";
-    public static final String BUTTON_EXCHANGE = "Биржа";
-    public static final String BUTTON_OIL = "Нефть";
-    public static final String BUTTON_POSITIONS = "Позиции по счёту";
-    public static final String BUTTON_OPERATIONS = "Операции по счёту";
-    public static final String BUTTON_BILL_1 = "Брокерский счёт";
-    public static final String BUTTON_BILL_2 = "Анти-мейнстрим Aggressive";
-    public static final String BUTTON_BILL_3 = "Новая Волна";
-    public static final String BUTTON_BACK = "Назад";
-    public static final String NOT_FOUND = "Обработчик команды не найден";
+
 
     public InvestAssistBot(EventHandler eventHandler) {
         this.eventHandler = eventHandler;
@@ -62,26 +54,27 @@ public class InvestAssistBot {
     }
 
     public SendMessage getStartKeyboard(long chatId, String text) {
-        String response = NOT_FOUND;
+        String response = TelegramDisplayConstants.NOT_FOUND;
         switch (text) {
-            case (BUTTON_CB):
+            case (TelegramDisplayConstants.BUTTON_CB):
                 response = "курс цб";
                 break;
-            case (BUTTON_EXCHANGE):
+            case (TelegramDisplayConstants.BUTTON_EXCHANGE):
 
                 response = "курс биржи";
                 break;
-            case (BUTTON_OPERATIONS):
+            case (TelegramDisplayConstants.BUTTON_OPERATIONS):
                 return getReplyMarkupPositions(chatId, text);
-            case (BUTTON_BILL_1):
-            case (BUTTON_BILL_2):
-            case (BUTTON_BILL_3):
+            case (TelegramDisplayConstants.BUTTON_BILL_1):
+            case (TelegramDisplayConstants.BUTTON_BILL_2):
+            case (TelegramDisplayConstants.BUTTON_BILL_3):
+            case (TelegramDisplayConstants.BUTTON_BILL_4):
+            case (TelegramDisplayConstants.BUTTON_BILL_5):
                 response = eventHandler.getOperations(text);
                 //return getReplyMarkupPositions(chatId, getPositionBalanseByAccountName(text));
                 break;
-            case (BUTTON_BACK):
-                getReplyMarkup(chatId,BUTTON_BACK);
-                break;
+            case (TelegramDisplayConstants.BUTTON_BACK):
+                return getReplyMarkup(chatId,TelegramDisplayConstants.BUTTON_BACK);
             default:
                 response = text;
         }
@@ -90,14 +83,10 @@ public class InvestAssistBot {
 
     public SendMessage getPositionKeyboard(long chatId, String text) {
         switch (text) {
-            case (BUTTON_BILL_1):
-            case (BUTTON_BILL_2):
-            case (BUTTON_BILL_3):
-                return getReplyMarkupPositions(chatId, getPositionBalanseByAccountName(text));
-            case (BUTTON_BACK):
+            case (TelegramDisplayConstants.BUTTON_BACK):
                 getReplyMarkup(chatId, text);
             default:
-                return getReplyMarkup(chatId, text);
+                return getReplyMarkupPositions(chatId, getPositionBalanseByAccountName(text));
         }
     }
 
@@ -118,7 +107,7 @@ public class InvestAssistBot {
     }
 
     private static SendMessage getReplyMarkup(long chatId, String text) {
-        return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{BUTTON_CB}, new String[]{BUTTON_EXCHANGE}, new String[]{BUTTON_OPERATIONS}));
+        return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(new String[]{TelegramDisplayConstants.BUTTON_CB}, new String[]{TelegramDisplayConstants.BUTTON_EXCHANGE}, new String[]{TelegramDisplayConstants.BUTTON_OPERATIONS}));
     }
 
     private SendMessage getReplyMarkupPositions(long chatId, String text) {
@@ -127,7 +116,7 @@ public class InvestAssistBot {
         String[] buttons = new String[accounts.length];
         for (int i = 0; i < accounts.length; i++)
             buttons[i] = accounts[i];
-        return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(buttons, new String[]{BUTTON_BACK}).resizeKeyboard(true));
+        return new SendMessage(chatId, text).replyMarkup(new ReplyKeyboardMarkup(buttons, new String[]{TelegramDisplayConstants.BUTTON_BACK}).resizeKeyboard(true));
     }
 
 

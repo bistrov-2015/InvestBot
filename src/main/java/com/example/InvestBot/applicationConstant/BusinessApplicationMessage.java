@@ -1,16 +1,16 @@
 package com.example.InvestBot.applicationConstant;
 
-public enum ApplicationConstant {
+public enum BusinessApplicationMessage {
     DATE_PATTERN_FOR_TELEGRAMM("dd MMMM yyyy"),
     NOT_CONTAIN_FIGI("не содержит figt"),
     NOT_INSTRUMENT("не является инструментом");
-    final String messege;
+    final String message;
 
-    ApplicationConstant(String messege) {
-        this.messege = messege;
+    BusinessApplicationMessage(String message) {
+        this.message = message;
     }
 
-    public String getMessege() {
-        return messege;
+    public String getMessage() {
+        return message;
     }
 }

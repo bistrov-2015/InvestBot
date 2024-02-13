@@ -1,16 +1,15 @@
 package com.example.InvestBot.tinkoff;
 
-import com.example.InvestBot.applicationConstant.ApplicationConstant;
+import com.example.InvestBot.applicationConstant.BusinessApplicationMessage;
+import com.example.InvestBot.tinkoff.builders.SequrityDtoBuilder;
 import com.example.InvestBot.tinkoff.dto.OperationMessage;
 import com.example.InvestBot.tinkoff.dto.SequrityDto;
-import com.example.InvestBot.tinkoff.builders.SequrityDtoBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.tinkoff.piapi.contract.v1.Account;
 import ru.tinkoff.piapi.contract.v1.OperationState;
 import ru.tinkoff.piapi.core.InvestApi;
-
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -75,22 +74,22 @@ public class EventHandler {
 
     public String getOperations(String accountName) {
         List<OperationMessage> returnedOperations = getOperations(api, accountName);
-        String result="";
-        for (OperationMessage element:returnedOperations
-             ) {
-            result+=element.toStringForTelegramm()+"\n";
+        String result = "";
+        for (OperationMessage element : returnedOperations
+        ) {
+            result += element.toStringForTelegramm() + "\n";
         }
         return result;
     }
 
     private List<OperationMessage> getOperations(InvestApi api, String accountName) {
-        List<OperationMessage>returnedOperations = new ArrayList<>();
+        List<OperationMessage> returnedOperations = new ArrayList<>();
         var accounts = api.getUserService().getAccountsSync();
         var mainAccount = accounts.get(0).getId();//2071316935
         var accountId = getAccountIdByAccountNames(accountName);//2071316935
         //Получаем и печатаем список операций клиента
         var operations = api.getOperationsService()
-                .getAllOperationsSync(accountId, Instant.now().minus(30, ChronoUnit.DAYS), Instant.now());
+                .getAllOperationsSync(accountId, Instant.now().minus(90, ChronoUnit.DAYS), Instant.now());
         for (int i = 0; i < Math.min(operations.size(), 5); i++) {
             var operation = operations.get(i);
             var date = timestampToString(operation.getDate());
@@ -100,10 +99,10 @@ public class EventHandler {
             var payment = moneyValueToBigDecimal(operation.getPayment());
             var figi = operation.getFigi();
             String instrumentName;
-            if(!figi.isEmpty()) {
+            if (!figi.isEmpty()) {
                 instrumentName = api.getInstrumentsService().getInstrumentByFigiSync(figi).getName();
-            } else instrumentName = ApplicationConstant.NOT_INSTRUMENT.getMessege();
-            OperationMessage operationMessage = new OperationMessage(date,type,state.toString(),id,payment,figi,instrumentName);
+            } else instrumentName = BusinessApplicationMessage.NOT_INSTRUMENT.getMessage();
+            OperationMessage operationMessage = new OperationMessage(date, type, state.toString(), id, payment, figi, instrumentName);
             log.info(operationMessage.toStringForLogs());
             returnedOperations.add(operationMessage);
         }
